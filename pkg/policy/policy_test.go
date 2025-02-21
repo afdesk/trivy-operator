@@ -635,6 +635,58 @@ func TestPolicies_Eval(t *testing.T) {
 			},
 			expectedError: "failed to run policy checks on resources",
 		},
+		{
+			name: "using a custom POD rule for RBAC",
+			resource: &rbacv1.Role{
+				TypeMeta: metav1.TypeMeta{
+					Kind:       "Role",
+					APIVersion: "rbacv1",
+				},
+				Rules: []rbacv1.PolicyRule{
+					{
+						APIGroups: []string{"*"},
+						Verbs:     []string{"get"},
+						Resources: []string{"secrets"}},
+				},
+			},
+			useBuiltInPolicies: false,
+			policies: map[string]string{
+				"policy.uses_image_tag_latest.kinds": "Pod",
+				"policy.uses_image_tag_latest.rego": `
+   package trivyoperator.policy.k8s.custom
+   __rego_metadata__ := {
+        "id": "CUSTOMCHECK",
+        "title": "custom check title",
+        "severity": "LOW",
+        "type": "Kubernetes Security Check",
+        "description": "custom check description",
+    }
+
+   alwaysTrue {
+      1 == 1
+   }
+
+   deny[res] {
+        alwaysTrue
+		res := {
+				"msg": "the check should be always failed",
+			}
+   }`,
+			},
+			results: []Result{
+				{
+					Metadata: Metadata{
+						ID:          "CUSTOMCHECK",
+						Title:       "custom check title",
+						Description: "custom check description",
+						Severity:    "LOW",
+						Type:        "Kubernetes Security Check",
+					},
+					Messages: []string{"the check should be always failed"},
+					Success:  false,
+				},
+			},
+		},
 	}
 
 	for _, tc := range testCases {
