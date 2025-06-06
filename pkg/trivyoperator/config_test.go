@@ -1134,6 +1134,19 @@ func TestConfigData_GetExcludeImages(t *testing.T) {
 			value:    "",
 			expected: []string{},
 		},
+		{
+			name:  "",
+			key:   "scanJob.excludeImages",
+			value: "*/*/cos-nvidia-installer:fixed,*/*/gke-nvidia-installer:fixed,gke-nvidia-installer:fixed,cos-nvidia-installer:fixed,gke.gcr.io/nvidia-partition-gpu:*,gke.gcr.io/nvidia-gpu-device-plugin:*gke.gcr.io/gke-metrics-collector:*",
+			expected: []string{
+				"*/*/cos-nvidia-installer:fixed",
+				"*/*/gke-nvidia-installer:fixed",
+				"gke-nvidia-installer:fixed",
+				"cos-nvidia-installer:fixed",
+				"gke.gcr.io/nvidia-partition-gpu:*",
+				"gke.gcr.io/nvidia-gpu-device-plugin:*gke.gcr.io/gke-metrics-collector:*",
+			},
+		},
 	}
 	for _, tc := range testCases {
 		configData := trivyoperator.ConfigData{}
