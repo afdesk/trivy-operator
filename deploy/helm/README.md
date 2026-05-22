@@ -27,8 +27,8 @@ Keeps security report resources updated
 | hostAliases | list | `[]` | hostAliases for `deployment` (TrivyOperator) and `statefulset` (TrivyServer) |
 | image.pullPolicy | string | `"IfNotPresent"` | pullPolicy set the operator pullPolicy |
 | image.pullSecrets | list | `[]` | pullSecrets set the operator pullSecrets |
-| image.registry | string | `"mirror.gcr.io"` |  |
-| image.repository | string | `"aquasec/trivy-operator"` |  |
+| image.registry | string | `"docker.io"` |  |
+| image.repository | string | `"afdesk/trivy-operator"` |  |
 | image.tag | string | `""` | tag is an override of the image tag, which is by default set by the appVersion field in Chart.yaml. |
 | managedBy | string | `"Helm"` | managedBy is similar to .Release.Service but allows to overwrite the value |
 | nameOverride | string | `""` | nameOverride override operator name |
